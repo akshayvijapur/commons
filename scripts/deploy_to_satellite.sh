@@ -88,26 +88,16 @@ EXISTING_SUB=$(ibmcloud sat subscription ls -q | grep "${SATELLITE_SUBSCRIPTION}
     ibmcloud sat subscription update --subscription "${SATELLITE_SUBSCRIPTION}" -f --group "${SATELLITE_CLUSTER_GROUP}" --version "${SAT_CONFIG_VERSION}"
 fi
 }
-
-ls -laht /artifacts/${MANIFEST_DIR}
-commit=$(git log -1 --pretty=format:%h)
-for filename in $(find /artifacts/${MANIFEST_DIR} -type f -print); do   
-  printLog "Searching for OpenShift Route resource type in file ${filename}" 
-  config_name=$(basename ${filename} | cut -d. -f1)
-  config_name_version=${config_name}_${commit} 
+filename=test.yaml
+helm repo add examples https://akshayvijapur.github.io/helm/
+helm template demo examples/hello-world > ${filename}
   createAndDeploySatelliteConfig ${APP_NAME} ${config_name} ${config_name_version} ${filename}
-done
 
-getAPPUrlSatConfig
 
 SATELLITE_CONFIG_ID=$( ibmcloud sat config get --config "${APP_NAME}" --output json | jq -r .uuid )
 printLog "Please check details at https://cloud.ibm.com/satellite/configuration/${SATELLITE_CONFIG_ID}/overview"
 
-if [ -z  "${APPURL}"  ] || [[  "${APPURL}" = "null"  ]]; then 
-  printWarning "Unable to get Host URL....."
-else
-  printLog "Route to the host is  ${APPURL}"
-fi
+
 
 
 
