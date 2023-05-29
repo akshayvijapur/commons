@@ -91,7 +91,10 @@ fi
 filename=./test.yaml
 helm repo add examples https://akshayvijapur.github.io/helm/
 helm template demo examples/hello-world > ${filename}
-cat ${filename}
+APP_NAME="demo-helm"
+config_name="demo-helm-config"
+config_name_version="demo-version"
+
   createAndDeploySatelliteConfig ${APP_NAME} ${config_name} ${config_name_version} ${filename}
 
 
