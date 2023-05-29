@@ -88,9 +88,10 @@ EXISTING_SUB=$(ibmcloud sat subscription ls -q | grep "${SATELLITE_SUBSCRIPTION}
     ibmcloud sat subscription update --subscription "${SATELLITE_SUBSCRIPTION}" -f --group "${SATELLITE_CLUSTER_GROUP}" --version "${SAT_CONFIG_VERSION}"
 fi
 }
-filename=test.yaml
+filename=./test.yaml
 helm repo add examples https://akshayvijapur.github.io/helm/
 helm template demo examples/hello-world > ${filename}
+cat ${filename}
   createAndDeploySatelliteConfig ${APP_NAME} ${config_name} ${config_name_version} ${filename}
 
 
